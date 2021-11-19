@@ -24,7 +24,7 @@
     
     <arg name="x" default="0.927375127252"/>
     <arg name="y" default="-0.379883425418"/>
-    <arg name="z" default="0.02"/>
+    <arg name="z" default="0.01"/>
     <arg name="r" default="3.14"/>
 
 
