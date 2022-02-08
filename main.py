@@ -6,6 +6,12 @@ import socket
 import select
 import sys
 import threading
+import rospy 
+from std_msgs.msg import String
+
+
+rospy.init_node('socket')
+
 hostname = socket.gethostname()
 local_ip = socket.gethostbyname(hostname)
 
@@ -28,11 +34,10 @@ def clientthread(conn, addr):
                 """prints the message and address of the
                 user who just sent the message on the server
                 terminal"""
-                print(message)
+                print(str(message.decode('utf-8')))
+                pub = rospy.Publisher('recv_msg', String, queue_size=10)
+                pub.publish(str(message.decode('utf-8')))
 
-                # Calls broadcast function to send message to all
-                # message_to_send = "<" + addr[0] + "> " + message
-                # print(message_to_send)
 
             else:
                 """message may have no content if the connection
@@ -94,7 +99,7 @@ while True:
     list_of_clients.append(conn)
 
     # prints the address of the user that just connected
-    #anaprint(addr[0] + " connected")
+    print(addr[0] + " connected")
     conn.send(bytes('c', 'utf-8'))
     # creates and individual thread for every user
     # that connects
