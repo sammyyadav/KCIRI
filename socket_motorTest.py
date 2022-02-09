@@ -1,13 +1,11 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+#!/usr/bin/env python3
 import socket
 import select
 import sys
 import threading
 import rospy 
 from std_msgs.msg import String
+from std_msgs.msg import Float64
 
 
 rospy.init_node('socket')
@@ -35,8 +33,28 @@ def clientthread(conn, addr):
                 user who just sent the message on the server
                 terminal"""
                 print(str(message.decode('utf-8')))
-                pub = rospy.Publisher('recv_msg', String, queue_size=10)
-                pub.publish(str(message.decode('utf-8')))
+                
+                if str(message.decode('utf-8')) == "f":
+                    rpmr = 17.0
+                    rpml = 17.0
+                elif str(message.decode('utf-8')) == "b":
+                    rpmr = -17.0
+                    rpml = -17.0
+                elif str(message.decode('utf-8')) == "l":
+                    rpmr = 17.0
+                    rpml = -17.0
+                elif str(message.decode('utf-8')) == "r":
+                    rpmr = -17.0
+                    rpml = 17.0
+                elif str(message.decode('utf-8')) == "s":
+                    rpml = 0.0
+                    rpmr = 0.0
+                
+                pub_rpml = rospy.Publisher('rpml_', Float64, queue_size=10)
+                pub_rpmr = rospy.Publisher('rpmr_', Float64, queue_size=10)
+                
+                pub_rpml.publish(rpml)
+                pub_rpmr.publish(rpmr)
 
 
             else:
